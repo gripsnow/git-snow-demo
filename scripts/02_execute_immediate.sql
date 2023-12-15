@@ -1,3 +1,5 @@
+use role accountadmin;
+use warehouse simple_wh;
 use schema git_demo_db.example_schema;
 
 --- Execute scripts in a Git stage

@@ -11,7 +11,7 @@ list @git_snow_demo_repository/branches/master/snowflake_objects;
 describe table my_inventory;
 
 -- This would make no changes to the table since the definition is the same as before
-EXECUTE IMMEDIATE FROM @git_snow_demo_repository/branches/master/snowflake_objects/databses/git_demo_db/schemas/example_schema/tables/my_inventory.sql;
+EXECUTE IMMEDIATE FROM @git_snow_demo_repository/branches/master/snowflake_objects/databases/git_demo_db/schemas/example_schema/tables/my_inventory.sql;
 
 describe table my_inventory;
 
