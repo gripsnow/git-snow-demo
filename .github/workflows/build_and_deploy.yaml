@@ -31,8 +31,6 @@ jobs:
           echo "[connections.dev]" >> config.toml
           echo "account = \"$SNOWFLAKE_CONNECTIONS_DEV_ACCOUNT\"" >> config.toml
 
-      - name: run my tests
-
       - name: Deploy demo objects
         env:
           SNOWFLAKE_CONNECTIONS_DEV_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
