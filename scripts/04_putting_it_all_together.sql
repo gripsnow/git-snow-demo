@@ -22,7 +22,7 @@ describe table my_inventory;
 alter git repository git_snow_demo_repository fetch;
 
 -- Apply the new changes declaritively
-EXECUTE IMMEDIATE FROM @git_snow_demo_repository/branches/master/snowflake_objects/databses/git_demo_db/schemas/example_schema/tables/my_inventory.sql;
+EXECUTE IMMEDIATE FROM @git_snow_demo_repository/branches/master/snowflake_objects/databases/git_demo_db/schemas/example_schema/tables/my_inventory.sql;
 
 describe table my_inventory;
 select * from my_inventory;
