@@ -1,0 +1,45 @@
+on:
+  push:
+    branches:
+      - master
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Use Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'     
+
+      - name: Install python packages
+        run: pip install -r requirements.txt
+
+      # It would be nice to get rid of this step entirely once SnowCLI supports using only env variables
+      - name: Configure SnowCLI
+        env:
+          SNOWFLAKE_CONNECTIONS_DEV_ACCOUNT: ${{ secrets.SF_ACCOUNT }}
+        run: |
+          echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
+          echo "[connections]" > config.toml
+          echo "[connections.dev]" >> config.toml
+          echo "account = \"$SNOWFLAKE_CONNECTIONS_DEV_ACCOUNT\"" >> config.toml
+
+      - name: Deploy demo objects
+        env:
+          SNOWFLAKE_CONNECTIONS_DEV_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_CONNECTIONS_DEV_USER: ${{ secrets.SNOWFLAKE_USER }}
+          SNOWFLAKE_CONNECTIONS_DEV_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+          SNOWFLAKE_CONNECTIONS_DEV_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
+          SNOWFLAKE_CONNECTIONS_DEV_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+          SNOWFLAKE_CONNECTIONS_DEV_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
+          SNOWFLAKE_CONNECTIONS_DEV_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
+        run: |
+          snow --config-file $GITHUB_WORKSPACE/config.toml sql -q "ALTER GIT REPOSITORY GIT_SNOW_DEMO_REPOSITORY FETCH"
+          snow --config-file $GITHUB_WORKSPACE/config.toml sql -q "EXECUTE IMMEDIATE FROM @git_snow_demo_repository/branches/master/snowflake_objects/databses/git_demo_db/schemas/example_schema/tables/my_inventory.sql"
