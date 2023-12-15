@@ -1,40 +1,50 @@
 use role accountadmin;
 
-CREATE DATABASE git_demo_db;
 USE DATABASE git_demo_db;
-CREATE SCHEMA example_schema;
 USE SCHEMA example_schema;
 
 CREATE OR REPLACE TABLE employees(id NUMBER, name VARCHAR, role VARCHAR);
-INSERT INTO employees (id, name, role) VALUES (1, 'Alice', 'op'), (2, 'Bob', 'dev'), (3, 'Cindy', 'dev');
+INSERT INTO employees (id, name, role) VALUES (1, 'Jane', 'op'), (2, 'Bob', 'dev'), (3, 'Cindy', 'dev');
 
+--- Create a Secret to store the GitHub PAT
 CREATE OR REPLACE SECRET git_secret
   TYPE = password
   USERNAME = 'gripsnow'
-  PASSWORD = '--redacted--';
+  PASSWORD = 'github-access-token';
 
-  CREATE OR REPLACE API INTEGRATION git_api_integration
+show secrets;
+describe secret git_secret;
+
+--- Create a Git API integration
+
+CREATE OR REPLACE API INTEGRATION git_api_integration
   API_PROVIDER = git_https_api
   API_ALLOWED_PREFIXES = ('https://github.com/gripsnow')
   ALLOWED_AUTHENTICATION_SECRETS = (git_secret)
   ENABLED = TRUE;
 
-  CREATE OR REPLACE GIT REPOSITORY git_snow_demo_repository
+CREATE OR REPLACE GIT REPOSITORY git_snow_demo_repository
   API_INTEGRATION = git_api_integration
   GIT_CREDENTIALS = git_secret
   ORIGIN = 'https://github.com/gripsnow/git-snow-demo.git';
 
-  -- pushed changes
+show integrations;
+show api integrations;
 
-  ALTER GIT REPOSITORY git_snow_demo_repository FETCH;
+show git repositories;
+describe git repository git_snow_demo_repository;
 
-  --
+--- List git details
+list @git_snow_demo_repository/branches/master;
+list @git_snow_demo_repository/tags/tag_name;
+list @git_snow_demo_repository/commits/commit_hash;
 
-   SHOW GIT BRANCHES IN git_snow_demo_repository;
-   LS @git_snow_demo_repository/branches/master;
-   DESCRIBE GIT REPOSITORY git_snow_demo_repository;
+show git branches in git_snow_demo_repository;
+show git tags in git_snow_demo_repository;
 
-   --
+alter git repository git_snow_demo_repository fetch;
+
+-- Example
 
   CREATE OR REPLACE PROCEDURE filter_by_role(tableName VARCHAR, role VARCHAR)
     RETURNS TABLE(id NUMBER, name VARCHAR, role VARCHAR)
