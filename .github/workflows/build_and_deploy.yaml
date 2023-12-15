@@ -42,5 +42,4 @@ jobs:
           SNOWFLAKE_CONNECTIONS_DEV_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
         run: |
           snow --config-file $GITHUB_WORKSPACE/config.toml sql -q "ALTER GIT REPOSITORY GIT_SNOW_DEMO_REPOSITORY FETCH"
-          snow --config-file $GITHUB_WORKSPACE/config.toml sql -q "EXECUTE IMMEDIATE FROM @git_snow_demo_repository/branches/master/snowflake_objects/databases/git_demo_db/schemas/example_schema/tables/my_inventory.sql"
-          snow --config-file $GITHUB_WORKSPACE/config.toml sql -q "EXECUTE IMMEDIATE FROM @git_snow_demo_repository/branches/master/snowflake_objects/databases/git_demo_db/schemas/example_schema/tables/order_template.sql"
+          snow --config-file $GITHUB_WORKSPACE/config.toml sql -q "EXECUTE IMMEDIATE FROM @git_snow_demo_repository/branches/master/snowflake_objects/deploy_objects.sql"
