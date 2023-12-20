@@ -3,6 +3,9 @@ CREATE or replace database git_demo_db;
 CREATE or replace schema example_schema;
 use git_demo_db.example_schema;
 drop table my_inventory;
+drop table dev_orders;
+drop table qa_orders;
+drop table staging_orders;
 
 -- Temporary fix for templating PrPr
 
