@@ -1,1 +1,6 @@
 snowflake-cli-labs==2.0.0a1
+snowflake-snowpark-python[pandas]
+tomli
+toml
+pytest
+snowflake-vcrpy @ git+https://github.com/Snowflake-Labs/snowflake-vcrpy.git@v0.1.1

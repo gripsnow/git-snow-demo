@@ -51,7 +51,7 @@ alter git repository git_snow_demo_repository fetch;
     LANGUAGE PYTHON
     RUNTIME_VERSION = '3.8'
     PACKAGES = ('snowflake-snowpark-python')
-    IMPORTS = ('@git_demo_db.example_schema.git_snow_demo_repository/branches/master/filter.py')
+    IMPORTS = ('@git_demo_db.example_schema.git_snow_demo_repository/branches/master/scripts/filter.py')
     HANDLER = 'filter.filter_by_role';
 
   CALL filter_by_role('employees', 'dev');
