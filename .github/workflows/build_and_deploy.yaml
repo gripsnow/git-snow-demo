@@ -26,6 +26,12 @@ jobs:
           pip install pytest pytest-cov
           python -m pytest --snowflake-session=local --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
 
+      - name: Test Summary
+        uses: test-summary/action@v2
+        with:
+          paths: $GITHUB_WORKSPACE/junit/test-results.xml
+        if: always()
+
       # It would be nice to get rid of this step entirely once SnowCLI supports using only env variables
       - name: Configure SnowCLI
         env:
