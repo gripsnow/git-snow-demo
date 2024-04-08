@@ -9,7 +9,7 @@ INSERT INTO employees (id, name, role) VALUES (1, 'Jane', 'op'), (2, 'Bob', 'dev
 --- Create a Secret to store the GitHub PAT
 CREATE OR REPLACE SECRET git_secret
   TYPE = password
-  USERNAME = 'gripsnow'
+  USERNAME = 'sfc-gh-jgrip'
   PASSWORD = 'github-access-token';
 
 show secrets;
@@ -19,14 +19,14 @@ describe secret git_secret;
 
 CREATE OR REPLACE API INTEGRATION git_api_integration
   API_PROVIDER = git_https_api
-  API_ALLOWED_PREFIXES = ('https://github.com/gripsnow')
+  API_ALLOWED_PREFIXES = ('https://github.com/sfc-gh-jgrip')
   ALLOWED_AUTHENTICATION_SECRETS = (git_secret)
   ENABLED = TRUE;
 
 CREATE OR REPLACE GIT REPOSITORY git_snow_demo_repository
   API_INTEGRATION = git_api_integration
   GIT_CREDENTIALS = git_secret
-  ORIGIN = 'https://github.com/gripsnow/git-snow-demo.git';
+  ORIGIN = 'https://github.com/sfc-gh-jgrip/git-snow-demo.git';
 
 show integrations;
 show api integrations;
